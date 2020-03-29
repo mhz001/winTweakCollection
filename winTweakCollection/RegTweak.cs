@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using Microsoft.Win32;
 
 namespace winTweakCollection
@@ -11,11 +10,13 @@ namespace winTweakCollection
         public string keyName;
         private string valueName;
         private readonly RegistryView rv = RegistryView.Default;
-        private RegistryHive rh = RegistryHive.LocalMachine;
+        private readonly RegistryHive rh;
         private bool valueExist;
         private object keyValue;
         private RegistryValueKind keyType;
         private object newValue = null;
+        private string cmd = "";
+        private bool cmdExist = false;
 
         public RegTweak(string subKey, string valueName): this ("HKLM", subKey, valueName)  {  }
 
@@ -26,26 +27,34 @@ namespace winTweakCollection
             this.subKey = subKey;
             this.valueName = valueName;
             keyName = $"{rootKey}\\{subKey}";
-            //if ((rootKey == "HKLM") || (rootKey == "HKEY_LOCAL_MACHINE"))
-            //    rh = RegistryHive.LocalMachine;
+            rh = RegistryHive.LocalMachine;
             if ((rootKey == "HKCU") || (rootKey == "HKEY_CURRENT_USER"))
                 rh = RegistryHive.CurrentUser;
             if ((rootKey == "HKCU") || (rootKey == "HKEY_CLASSES_ROOT"))
                 rh = RegistryHive.ClassesRoot;
+
             RegistryKey key = RegistryKey.OpenBaseKey(rh, rv).OpenSubKey(subKey);
-            keyValue = key.GetValue(valueName);
-            if (keyValue is null)
+            if (key != null)
+            {
+                keyValue = key.GetValue(valueName);
+                if (keyValue is null)
+                {
+                    valueExist = false;
+                    keyType = RegistryValueKind.DWord;
+                    keyValue = 0;
+                }
+                else
+                {
+                    valueExist = true;
+                    keyType = key.GetValueKind(valueName);
+                }
+            }
+            else
             {
                 valueExist = false;
                 keyType = RegistryValueKind.DWord;
                 keyValue = 0;
             }
-            else
-            {
-                valueExist = true;
-                keyType = key.GetValueKind(valueName);
-            }
-
         }
 
         public string Name { get; set; }
@@ -56,29 +65,30 @@ namespace winTweakCollection
         public RegistryValueKind KeyType { get => keyType; set => keyType = value; }
         public object KeyValue { get => keyValue; }
         public object NewValue { get => newValue; set => newValue = value; }
+        public bool CmdExist { get => cmdExist; set => cmdExist = value; }
+        public string Cmd { get => cmd; set => cmd = value; }
 
-        public void SaveNewValue()
+        public string SaveNewValue()
         {
             try
             {
-                RegistryKey key = RegistryKey.OpenBaseKey(rh, rv).OpenSubKey(subKey, true);
+                RegistryKey key = RegistryKey.OpenBaseKey(rh, rv).CreateSubKey(subKey, true);
                 key.SetValue(valueName, newValue, keyType);
-            }
-            catch (ArgumentNullException e)
-            {
-                _ = MessageBox.Show(e.Message); //Свойство value имеет значение null.
+                return valueName + " записан\n";
             }
             catch (ArgumentException e)
             {
-                _ = MessageBox.Show(e.Message); //Значение параметра value является неподдерживаемым типом данных.
+                //_ = MessageBox.Show(e.Message); //Значение параметра value является неподдерживаемым типом данных.
+                return e.Message;
             }
             catch (ObjectDisposedException e)
             {
-                _ = MessageBox.Show(e.Message); //Объект RegistryKey, содержащий заданное значение, закрыт(доступ к закрытым разделам отсутствует).
+                //_ = MessageBox.Show(e.Message); //Объект RegistryKey, содержащий заданное значение, закрыт(доступ к закрытым разделам отсутствует).
+                return e.Message;
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
-                _ = MessageBox.Show(e.Message); //Раздел RegistryKey является разделом только для чтения, и запись в него невозможна. Например, этот раздел не был открыт с доступом для записи.
+                return e.Message;
             }
         }
     }

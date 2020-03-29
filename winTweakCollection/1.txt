@@ -1,0 +1,20 @@
+Необходимо создать манифест таким образом чтобы если у пользователя есть права администратора то они запрашивались бы. А если нет прав администратор то запуск происходил бы без запроса.
+Прошу привести пример такого манифеста.
+
+<requestedExecutionLevel
+     level="highestAvailable"
+     uiAccess="false"/>
+
+
+
+
+Process.Start(new ProcessStartInfo("cmd", "/c mmc compmgmt.msc") {
+    Verb = "runas"
+});
+
+
+
+
+var startInfo = new ProcessStartInfo("app.exe") { Verb = "runas" };
+Process.Start(startInfo);
+

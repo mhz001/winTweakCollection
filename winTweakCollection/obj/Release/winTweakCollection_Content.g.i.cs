@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("image.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("nuget-ini-icon.png")]
 
 

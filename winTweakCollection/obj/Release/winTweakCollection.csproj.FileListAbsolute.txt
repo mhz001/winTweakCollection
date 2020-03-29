@@ -26,3 +26,4 @@ c:\Users\MhZ\source\repos\winTweakCollection\winTweakCollection\obj\Release\winT
 c:\Users\MhZ\source\repos\winTweakCollection\winTweakCollection\obj\Release\winTweakCollection.csproj.GenerateResource.cache
 c:\Users\MhZ\source\repos\winTweakCollection\winTweakCollection\obj\Release\winTweakCollection.exe
 c:\Users\MhZ\source\repos\winTweakCollection\winTweakCollection\obj\Release\winTweakCollection.pdb
+C:\Users\m.zaytsev\source\repos\winTweakCollection\winTweakCollection\obj\Release\winTweakCollection.csproj.CoreCompileInputs.cache
