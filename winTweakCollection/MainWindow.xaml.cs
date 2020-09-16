@@ -23,11 +23,11 @@ namespace winTweakCollection
     public partial class MainWindow : Window
     {
         //объявляем переменные
-        private static string[] inifiles;// ини файлы с польховательскими твиками
-        private static int count;// кол-во файлов
-        private static TextBlock[] tbarray;// Текст блоки для твиков
-        private static CheckBox[] checks;// Чекбоксы для твиков
-        private static RegTweak[] regTweaks;// сами твики
+        private string[] inifiles;// ини файлы с польховательскими твиками
+        private int count;// кол-во файлов
+        private TextBlock[] tbarray;// Текст блоки для твиков
+        private CheckBox[] checks;// Чекбоксы для твиков
+        private RegTweak[] regTweaks;// сами твики
 
         public MainWindow()
         {
